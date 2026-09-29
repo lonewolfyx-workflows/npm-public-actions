@@ -17,14 +17,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      
+
       - uses: lonewolfyx-workflows/npm-public-actions@main
         with:
           package-manager: pnpm
         permissions:
           contents: write
           id-token: write
-      
+
       - run: npx genereleaselog@latest
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
