@@ -1,0 +1,50 @@
+name: npm Publish
+description: public project package
+
+inputs:
+  package-manager:
+    description: 'Package manager to use. Examples: npm, yarn, pnpm.'
+    default: pnpm
+
+  node-version:
+    description: Node.js version to set up
+    default: lts/*
+
+  working-directory:
+    description: Directory containing the package to publish
+    required: false
+    default: .
+
+runs:
+  using: composite
+
+  steps:
+    - uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+
+    - name: Setup pnpm
+      if: inputs.package-manager == 'pnpm'
+      uses: pnpm/action-setup@v6
+
+    - name: Setup Js
+      uses: actions/setup-node@v7
+      with:
+        node-version: ${{ inputs.node-version }}
+        registry-url: https://registry.npmjs.org
+        package-manager-cache: false
+
+    - name: Install dependencies
+      shell: bash
+      env:
+        PACKAGE_MANAGER: ${{ inputs.package-manager }}
+      run: $PACKAGE_MANAGER install --frozen-lockfile
+
+    - name: Publish to npm
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: npm publish
+
+branding:
+  icon: package
+  color: red
