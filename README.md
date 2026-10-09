@@ -12,6 +12,10 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+  id-token: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -21,9 +25,6 @@ jobs:
       - uses: lonewolfyx-workflows/npm-public-actions@main
         with:
           package-manager: pnpm
-        permissions:
-          contents: write
-          id-token: write
 
       - run: npx genereleaselog@latest
         env:
