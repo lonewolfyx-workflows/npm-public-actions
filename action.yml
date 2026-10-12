@@ -14,6 +14,10 @@ inputs:
     description: Directory containing the package to publish
     required: false
     default: .
+  tag:
+    description: 'npm tag to publish with'
+    required: false
+    default: ''
 
 runs:
   using: composite
@@ -42,7 +46,7 @@ runs:
     - name: Publish to npm
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: npm publish
+      run: npm publish ${{ inputs['tag'] && format('--tag {0}', inputs['tag']) || '--tag latest' }}
 
 branding:
   icon: package
